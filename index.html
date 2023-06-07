@@ -76,9 +76,10 @@
 
             const abrirEnOtraVentana = document.createElement('a');
             abrirEnOtraVentana.href = url;
-            abrirEnOtraVentana.target = '_blank';
+			abrirEnOtraVentana.target = obtenerNombreAleatorio();
             abrirEnOtraVentana.textContent = 'Abrir Nueva Ventana';
             contenidoCapa.appendChild(abrirEnOtraVentana);
+
 
             const abrirVentanaPersonalizada = document.createElement('a');
             abrirVentanaPersonalizada.href = url;
@@ -102,7 +103,11 @@
         function ocultarCapa() {
             capa.style.display = 'none';
         }
-
+		
+        function obtenerNombreAleatorio() {
+            const date = new Date();
+            return "TigoPlay_" + date.getTime();
+        }
         function toggleMaximizar() {
             if (esMaximizada) {
                 contenidoCapa.classList.remove('contenido-capa-maximizada');
