@@ -69,68 +69,67 @@
         function mostrarCapa(url) {
             contenidoCapa = document.getElementById('contenido-capa');
             capa.style.display = 'flex';
-
+          
             // Vaciar contenido previo
             contenidoCapa.innerHTML = '';
-
+          
             const abrirEnOtraVentana = document.createElement('a');
             abrirEnOtraVentana.href = url;
             abrirEnOtraVentana.target = obtenerNombreAleatorio();
             abrirEnOtraVentana.textContent = 'Abrir Nueva Ventana';
+            abrirEnOtraVentana.addEventListener('click', () => seleccionarEnlace(0));
             contenidoCapa.appendChild(abrirEnOtraVentana);
-
+          
             const abrirVentanaPersonalizada = document.createElement('a');
             abrirVentanaPersonalizada.href = url;
             abrirVentanaPersonalizada.target = 'Tigo Play';
             abrirVentanaPersonalizada.textContent = 'Abrir en Ventana Anterior';
+            abrirVentanaPersonalizada.addEventListener('click', () => seleccionarEnlace(1));
             contenidoCapa.appendChild(abrirVentanaPersonalizada);
-
+          
             const refrescarPantalla = document.createElement('a');
             refrescarPantalla.href = '';
             refrescarPantalla.textContent = 'Refrescar pantalla';
-            refrescarPantalla.addEventListener('click', () => location.reload());
+            refrescarPantalla.addEventListener('click', () => {
+                seleccionarEnlace(2);
+                location.reload();
+            });
             contenidoCapa.appendChild(refrescarPantalla);
-
+          
             const irEnlacePrincipal = document.createElement('a');
             irEnlacePrincipal.href = 'https://tvbro.phlox.dev/appcontent/home/';
             irEnlacePrincipal.textContent = 'Home';
+            irEnlacePrincipal.addEventListener('click', () => seleccionarEnlace(3));
             contenidoCapa.appendChild(irEnlacePrincipal);
-                
+          
             let selectedLinkIndex = 0;
             const enlaces = contenidoCapa.querySelectorAll("a");
             enlaces[selectedLinkIndex].classList.add("selected");
             enlaces[selectedLinkIndex].focus(); // Establecer enfoque en el elemento seleccionado
-				
+          
+            function seleccionarEnlace(index) {
+                enlaces[selectedLinkIndex].classList.remove("selected");
+                selectedLinkIndex = index;
+                enlaces[selectedLinkIndex].classList.add("selected");
+                enlaces[selectedLinkIndex].focus(); // Establecer enfoque en el nuevo elemento seleccionado
+            }
+          
             document.addEventListener("keydown", function(event) {
-                if (event.key === "ArrowUp" || event.key === "ChannelUp" || event.key === "w") {
-                    event.preventDefault();
-                    if (selectedLinkIndex > 0) {
-                        enlaces[selectedLinkIndex].classList.remove("selected");
-                        selectedLinkIndex--;
-                        enlaces[selectedLinkIndex].classList.add("selected");
-                        enlaces[selectedLinkIndex].focus(); // Establecer enfoque en el nuevo elemento seleccionado
-                    }
-                    else {
-                        enlaces[selectedLinkIndex].classList.remove("selected");
-                        selectedLinkIndex = enlaces.length - 1;
-                        enlaces[selectedLinkIndex].classList.add("selected");
-                        enlaces[selectedLinkIndex].focus(); // Establecer enfoque en el nuevo elemento seleccionado
-                    }
-                } else if (event.key === "ArrowDown" || event.key === "ChannelDown" || event.key === "s") {
-                    event.preventDefault();
-                    if (selectedLinkIndex < enlaces.length - 1) {
-                        enlaces[selectedLinkIndex].classList.remove("selected");
-                        selectedLinkIndex++;
-                        enlaces[selectedLinkIndex].classList.add("selected");
-                        enlaces[selectedLinkIndex].focus(); // Establecer enfoque en el nuevo elemento seleccionado
-                    }
-                    else {
-                        enlaces[selectedLinkIndex].classList.remove("selected");
-                        selectedLinkIndex = 0;
-                        enlaces[selectedLinkIndex].classList.add("selected");
-                        enlaces[selectedLinkIndex].focus(); // Establecer enfoque en el nuevo elemento seleccionado
-                    }
+              if (event.key === "ArrowUp" || event.key === "ChannelUp" || event.key === "w") {
+                event.preventDefault();
+                if (selectedLinkIndex > 0) {
+                  seleccionarEnlace(selectedLinkIndex - 1);
+                } else {
+                  seleccionarEnlace(enlaces.length - 1);
                 }
+              } else if (event.key === "ArrowDown" || event.key === "ChannelDown" || event.key === "s") {
+                event.preventDefault();
+                if (selectedLinkIndex < enlaces.length - 1) {
+                  seleccionarEnlace(selectedLinkIndex + 1);
+                } else {
+                  seleccionarEnlace(0);
+                }
+              }
             });
         }
         
@@ -156,7 +155,11 @@
                 ocultarCapa();
             }
         }
-
+		
+        document.addEventListener("backbutton", function(event) {
+           capa.style.display = 'none';
+        }, false);
+		
         document.onkeydown = function(event) {
             if (event.key === 'F9') {
                 toggleMaximizar();
@@ -281,8 +284,8 @@
             }
         }
 
-        document.addEventListener("keyup", function(event) {
-            if (event.key === "ArrowUp" || event.key === "ChannelUp" || event.key === "w") {
+        document.addEventListener("keydown", function(event) {
+            if (event.key === "ArrowUp" || event.key === "ChannelUp" || event.key === "MediaTrackNext") {
                 event.preventDefault();
                 if (capa.style.display === "none" && selectedRowIndex > 0) {
                     selectedRowIndex--;
@@ -296,7 +299,7 @@
                         updateSelection();
                     }
                 }
-            } else if (event.key === "ArrowDown" || event.key === "ChannelDown" || event.key === "s") {
+            } else if (event.key === "ArrowDown" || event.key === "ChannelDown" || event.key === "MediaTrackPrevious") {
                 event.preventDefault();
                 if (capa.style.display === "none" && selectedRowIndex < rows.length - 1) {
                     if (selectedRowIndex === rows.length - 2 && rows[selectedRowIndex + 1].querySelectorAll("td").length <= selectedColumnIndex) {
@@ -310,7 +313,7 @@
                     selectedRowIndex = 0;
                     updateSelection();
                 }
-            } else if (event.key === "ArrowLeft" || event.key === "a") {
+            } else if (event.key === "ArrowLeft" || event.key === "MediaRewind") {
                 event.preventDefault();
                 if (capa.style.display === "none" && selectedColumnIndex > 0) {
                     selectedColumnIndex--;
@@ -319,7 +322,7 @@
                     selectedColumnIndex = rows[selectedRowIndex].querySelectorAll("td").length - 1;
                     updateSelection();
                 }
-            } else if (event.key === "ArrowRight" || event.key === "d") {
+            } else if (event.key === "ArrowRight" || event.key === "MediaFastForward") {
                 event.preventDefault();
                 if (capa.style.display === "none" && selectedColumnIndex < rows[selectedRowIndex].querySelectorAll("td").length - 1) {
                     selectedColumnIndex++;
@@ -328,7 +331,7 @@
                     selectedColumnIndex = 0;
                     updateSelection();
                 }
-            } else if (event.key === "Enter") {
+            } else if (event.key === "Enter" || event.key === "MediaPlayPause") {
                 if (capa.style.display === "none") {
                     event.preventDefault();
                     openSelectedLink(null,null);
