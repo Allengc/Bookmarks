@@ -34,7 +34,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden; 
+            overflow: hidden;
             padding: 10px;
             border-radius: 5px;
             color: #fff;
@@ -110,11 +110,23 @@
                         enlaces[selectedLinkIndex].classList.add("selected");
                         enlaces[selectedLinkIndex].focus(); // Establecer enfoque en el nuevo elemento seleccionado
                     }
+                    else {
+                        enlaces[selectedLinkIndex].classList.remove("selected");
+                        selectedLinkIndex = enlaces.length - 1;
+                        enlaces[selectedLinkIndex].classList.add("selected");
+                        enlaces[selectedLinkIndex].focus(); // Establecer enfoque en el nuevo elemento seleccionado
+                    }
                 } else if (event.key === "ArrowDown") {
                     event.preventDefault();
                     if (selectedLinkIndex < enlaces.length - 1) {
                         enlaces[selectedLinkIndex].classList.remove("selected");
                         selectedLinkIndex++;
+                        enlaces[selectedLinkIndex].classList.add("selected");
+                        enlaces[selectedLinkIndex].focus(); // Establecer enfoque en el nuevo elemento seleccionado
+                    }
+                    else {
+                        enlaces[selectedLinkIndex].classList.remove("selected");
+                        selectedLinkIndex = 0;
                         enlaces[selectedLinkIndex].classList.add("selected");
                         enlaces[selectedLinkIndex].focus(); // Establecer enfoque en el nuevo elemento seleccionado
                     }
@@ -237,8 +249,6 @@
     </table>
     <script>
         const rows = document.querySelectorAll("table tr");
-        const links = document.querySelectorAll("table td a");
-
         let selectedRowIndex = 0;
         let selectedColumnIndex = 0;
 
@@ -256,33 +266,55 @@
         function openSelectedLink() {
             const selectedCell = rows[selectedRowIndex].querySelectorAll("td")[selectedColumnIndex];
             const link = selectedCell.querySelector("a").getAttribute("onclick").match(/'(.*?)'/)[1];
-		    // Eliminar la selección
+
             mostrarCapa(link);
         }
 
         document.addEventListener("keydown", function(event) {
-            if (event.key === "ArrowUp") {
+            if (event.key === "ArrowUp" || event.key === "ChannelUp") {
                 event.preventDefault();
                 if (capa.style.display === "none" && selectedRowIndex > 0) {
                     selectedRowIndex--;
                     updateSelection();
+                } else if (capa.style.display === "none" && selectedRowIndex === 0) {
+                    if (rows[rows.length - 1].querySelectorAll("td").length > selectedColumnIndex) {
+                        selectedRowIndex = rows.length - 1;
+                        updateSelection();
+                    } else {
+                        selectedRowIndex = rows.length - 2;
+                        updateSelection();
+                    }
                 }
-            } else if (event.key === "ArrowDown") {
+            } else if (event.key === "ArrowDown" || event.key === "ChannelDown") {
                 event.preventDefault();
                 if (capa.style.display === "none" && selectedRowIndex < rows.length - 1) {
-                    selectedRowIndex++;
+                    if (selectedRowIndex === rows.length - 2 && rows[selectedRowIndex + 1].querySelectorAll("td").length <= selectedColumnIndex) {
+                        selectedRowIndex = 0;
+                        updateSelection();
+                    } else {
+                        selectedRowIndex++;
+                        updateSelection();
+                    }
+                } else if (capa.style.display === "none" && selectedRowIndex === rows.length - 1) {
+                    selectedRowIndex = 0;
                     updateSelection();
-                } 
+                }
             } else if (event.key === "ArrowLeft") {
                 event.preventDefault();
                 if (capa.style.display === "none" && selectedColumnIndex > 0) {
                     selectedColumnIndex--;
+                    updateSelection();
+                } else if (capa.style.display === "none" && selectedColumnIndex === 0) {
+                    selectedColumnIndex = rows[selectedRowIndex].querySelectorAll("td").length - 1;
                     updateSelection();
                 }
             } else if (event.key === "ArrowRight") {
                 event.preventDefault();
                 if (capa.style.display === "none" && selectedColumnIndex < rows[selectedRowIndex].querySelectorAll("td").length - 1) {
                     selectedColumnIndex++;
+                    updateSelection();
+                } else if (capa.style.display === "none" && selectedColumnIndex === rows[selectedRowIndex].querySelectorAll("td").length - 1) {
+                    selectedColumnIndex = 0;
                     updateSelection();
                 }
             } else if (event.key === "Enter") {
