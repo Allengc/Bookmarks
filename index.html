@@ -115,14 +115,14 @@
             }
           
             document.addEventListener("keydown", function(event) {
-              if (event.key === "ArrowUp" || event.key === "ChannelUp" || event.key === "MediaTrackPrevious") {
+              if (event.key === "ArrowUp" || event.key === "ChannelUp" || event.key === "MediaTrackPrevious" || event.key === "1") {
                 event.preventDefault();
                 if (selectedLinkIndex > 0) {
                   seleccionarEnlace(selectedLinkIndex - 1);
                 } else {
                   seleccionarEnlace(enlaces.length - 1);
                 }
-              } else if (event.key === "ArrowDown" || event.key === "ChannelDown" || event.key === "MediaTrackNext") {
+              } else if (event.key === "ArrowDown" || event.key === "ChannelDown" || event.key === "MediaTrackNext" || event.key === "4") {
                 event.preventDefault();
                 if (selectedLinkIndex < enlaces.length - 1) {
                   seleccionarEnlace(selectedLinkIndex + 1);
@@ -156,15 +156,11 @@
             }
         }
 		
-        document.addEventListener("backbutton", function(event) {
-           capa.style.display = 'none';
-        }, false);
-		
         document.onkeydown = function(event) {
-            if (event.key === 'F9') {
-                toggleMaximizar();
+            if (event.key === "1") {
+                capa.style.display = 'none';
             }
-			if (event.key === 'Escape' || event.code === 'Back') {
+			if (event.key === 'Escape') {
                 capa.style.display = 'none';
             }
         }
@@ -285,7 +281,7 @@
         }
 
         document.addEventListener("keydown", function(event) {
-            if (event.key === "ArrowUp" || event.key === "ChannelUp" || event.key === "MediaTrackNext") {
+            if (event.key === "ArrowUp" || event.key === "ChannelUp" || event.key === "MediaTrackNext" || event.key === "2") {
                 event.preventDefault();
                 if (capa.style.display === "none" && selectedRowIndex > 0) {
                     selectedRowIndex--;
@@ -299,7 +295,7 @@
                         updateSelection();
                     }
                 }
-            } else if (event.key === "ArrowDown" || event.key === "ChannelDown" || event.key === "MediaTrackPrevious") {
+            } else if (event.key === "ArrowDown" || event.key === "ChannelDown" || event.key === "MediaTrackPrevious" || event.key === "8") {
                 event.preventDefault();
                 if (capa.style.display === "none" && selectedRowIndex < rows.length - 1) {
                     if (selectedRowIndex === rows.length - 2 && rows[selectedRowIndex + 1].querySelectorAll("td").length <= selectedColumnIndex) {
@@ -313,7 +309,7 @@
                     selectedRowIndex = 0;
                     updateSelection();
                 }
-            } else if (event.key === "ArrowLeft" || event.key === "MediaRewind") {
+            } else if (event.key === "ArrowLeft" || event.key === "MediaRewind" || event.key === "4") {
                 event.preventDefault();
                 if (capa.style.display === "none" && selectedColumnIndex > 0) {
                     selectedColumnIndex--;
@@ -322,7 +318,7 @@
                     selectedColumnIndex = rows[selectedRowIndex].querySelectorAll("td").length - 1;
                     updateSelection();
                 }
-            } else if (event.key === "ArrowRight" || event.key === "MediaFastForward") {
+            } else if (event.key === "ArrowRight" || event.key === "MediaFastForward" || event.key === "6") {
                 event.preventDefault();
                 if (capa.style.display === "none" && selectedColumnIndex < rows[selectedRowIndex].querySelectorAll("td").length - 1) {
                     selectedColumnIndex++;
@@ -331,7 +327,7 @@
                     selectedColumnIndex = 0;
                     updateSelection();
                 }
-            } else if (event.key === "Enter" || event.key === "MediaPlayPause") {
+            } else if (event.key === "Enter" || event.key === "MediaPlay") || event.key === "5"){
                 if (capa.style.display === "none") {
                     event.preventDefault();
                     openSelectedLink(null,null);
