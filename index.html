@@ -102,7 +102,7 @@
             enlaces[selectedLinkIndex].focus(); // Establecer enfoque en el elemento seleccionado
 				
             document.addEventListener("keydown", function(event) {
-                if (event.key === "ArrowUp") {
+                if (event.key === "ArrowUp" || event.key === "ChannelUp" || event.key === "w") {
                     event.preventDefault();
                     if (selectedLinkIndex > 0) {
                         enlaces[selectedLinkIndex].classList.remove("selected");
@@ -116,7 +116,7 @@
                         enlaces[selectedLinkIndex].classList.add("selected");
                         enlaces[selectedLinkIndex].focus(); // Establecer enfoque en el nuevo elemento seleccionado
                     }
-                } else if (event.key === "ArrowDown") {
+                } else if (event.key === "ArrowDown" || event.key === "ChannelDown" || event.key === "s") {
                     event.preventDefault();
                     if (selectedLinkIndex < enlaces.length - 1) {
                         enlaces[selectedLinkIndex].classList.remove("selected");
@@ -271,7 +271,7 @@
         }
 
         document.addEventListener("keydown", function(event) {
-            if (event.key === "ArrowUp" || event.key === "ChannelUp") {
+            if (event.key === "ArrowUp" || event.key === "ChannelUp" || event.key === "w") {
                 event.preventDefault();
                 if (capa.style.display === "none" && selectedRowIndex > 0) {
                     selectedRowIndex--;
@@ -285,7 +285,7 @@
                         updateSelection();
                     }
                 }
-            } else if (event.key === "ArrowDown" || event.key === "ChannelDown") {
+            } else if (event.key === "ArrowDown" || event.key === "ChannelDown" || event.key === "s") {
                 event.preventDefault();
                 if (capa.style.display === "none" && selectedRowIndex < rows.length - 1) {
                     if (selectedRowIndex === rows.length - 2 && rows[selectedRowIndex + 1].querySelectorAll("td").length <= selectedColumnIndex) {
@@ -299,7 +299,7 @@
                     selectedRowIndex = 0;
                     updateSelection();
                 }
-            } else if (event.key === "ArrowLeft") {
+            } else if (event.key === "ArrowLeft" || event.key === "a") {
                 event.preventDefault();
                 if (capa.style.display === "none" && selectedColumnIndex > 0) {
                     selectedColumnIndex--;
@@ -308,7 +308,7 @@
                     selectedColumnIndex = rows[selectedRowIndex].querySelectorAll("td").length - 1;
                     updateSelection();
                 }
-            } else if (event.key === "ArrowRight") {
+            } else if (event.key === "ArrowRight" || event.key === "d") {
                 event.preventDefault();
                 if (capa.style.display === "none" && selectedColumnIndex < rows[selectedRowIndex].querySelectorAll("td").length - 1) {
                     selectedColumnIndex++;
