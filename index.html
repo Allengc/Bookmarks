@@ -115,14 +115,14 @@
             }
           
             document.addEventListener("keydown", function(event) {
-              if (event.key === "ArrowUp" || event.key === "ChannelUp" || event.key === "w") {
+              if (event.key === "ArrowUp" || event.key === "ChannelUp" || event.key === "MediaTrackPrevious") {
                 event.preventDefault();
                 if (selectedLinkIndex > 0) {
                   seleccionarEnlace(selectedLinkIndex - 1);
                 } else {
                   seleccionarEnlace(enlaces.length - 1);
                 }
-              } else if (event.key === "ArrowDown" || event.key === "ChannelDown" || event.key === "s") {
+              } else if (event.key === "ArrowDown" || event.key === "ChannelDown" || event.key === "MediaTrackNext") {
                 event.preventDefault();
                 if (selectedLinkIndex < enlaces.length - 1) {
                   seleccionarEnlace(selectedLinkIndex + 1);
