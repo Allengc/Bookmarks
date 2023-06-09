@@ -279,20 +279,22 @@
         }
 
         function openSelectedLink(element, link) {
+		    let altValue = ""; // Inicializar la variable altValue
             if (element === null || link === null) {
 			    const selectedCell = rows[selectedRowIndex].querySelectorAll("td")[selectedColumnIndex];
-                const link2 = selectedCell.querySelector("a").getAttribute("onclick").match(/'(.*?)'/)[1];
-                mostrarCapa(link2);
+                link = selectedCell.querySelector("a").getAttribute("onclick").match(/'(.*?)'/)[1];
+				altValue = selectedCell.querySelector("a img").getAttribute("alt");
             } 
 		    else {
 			    selectedRowIndex = element.getAttribute("data-row");
                 selectedColumnIndex = element.getAttribute("data-column");
                 updateSelection()
-				mostrarCapa(link);
+				altValue = element.querySelector("img").getAttribute("alt");
             }
+			window.open(link, altValue);
         }
 
-        document.addEventListener("keyup", function(event) {
+        document.addEventListener("keydown", function(event) {
             if (event.key === "ArrowUp" || event.key === "ChannelUp" || event.key === "MediaTrackNext" || event.key === "2") {
                 event.preventDefault();
                 if (capa.style.display === "none" && selectedRowIndex > 0) {
@@ -427,7 +429,7 @@
                 lastMouseY = currentMouseY;
 
                 setTimeout(function() {
-                    isMouseMoving = false;
+                    isMouseMoving = true;
                 }, delay);
             }
         }
