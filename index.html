@@ -291,7 +291,8 @@
                 updateSelection()
 				altValue = element.querySelector("img").getAttribute("alt");
             }
-			window.open(link, altValue);
+			const nuevaVentana = window.open(link, altValue);
+			nuevaVentana.focus();
         }
 
         document.addEventListener("keydown", function(event) {
