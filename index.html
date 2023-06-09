@@ -352,5 +352,87 @@
         capa = document.getElementById('capa');
         capa.style.display = 'none';
     </script>
+    <script>
+        var focusedCell = null;
+        var lastMouseX = null;
+        var lastMouseY = null;
+        var sensitivity = 0.5; // Ajusta la sensibilidad del movimiento del mouse
+        var delay = 100; // Tiempo de espera en milisegundos
+
+        var isMouseMoving = false; // Bandera para indicar si el mouse está en movimiento
+
+        function handleMouseMove(event) {
+            if (!isMouseMoving) {
+                isMouseMoving = true;
+
+                var currentMouseX = event.clientX;
+                var currentMouseY = event.clientY;
+
+                if (lastMouseX !== null && lastMouseY !== null) {
+                    var deltaX = (currentMouseX - lastMouseX) * sensitivity;
+                    var deltaY = (currentMouseY - lastMouseY) * sensitivity;
+
+                    // Determinar la dirección del movimiento
+                    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                        if (deltaX > 0) {
+                            event.preventDefault();
+                            if (capa.style.display === "none" && selectedColumnIndex < rows[selectedRowIndex].querySelectorAll("td").length - 1) {
+                                selectedColumnIndex++;
+                                updateSelection();
+                            } else if (capa.style.display === "none" && selectedColumnIndex === rows[selectedRowIndex].querySelectorAll("td").length - 1) {
+                                selectedColumnIndex = 0;
+                                updateSelection();
+                            }
+                        } else {
+                            if (capa.style.display === "none" && selectedColumnIndex > 0) {
+                                selectedColumnIndex--;
+                                updateSelection();
+                            } else if (capa.style.display === "none" && selectedColumnIndex === 0) {
+                                selectedColumnIndex = rows[selectedRowIndex].querySelectorAll("td").length - 1;
+                                updateSelection();
+                            }
+                        }
+                    } else {
+                        if (deltaY > 0) {
+                            if (capa.style.display === "none" && selectedRowIndex < rows.length - 1) {
+                                if (selectedRowIndex === rows.length - 2 && rows[selectedRowIndex + 1].querySelectorAll("td").length <= selectedColumnIndex) {
+                                    selectedRowIndex = 0;
+                                    updateSelection();
+                                } else {
+                                    selectedRowIndex++;
+                                    updateSelection();
+                                }
+                            } else if (capa.style.display === "none" && selectedRowIndex === rows.length - 1) {
+                                selectedRowIndex = 0;
+                                updateSelection();
+                            }
+                        } else {
+                            if (capa.style.display === "none" && selectedRowIndex > 0) {
+                                selectedRowIndex--;
+                                updateSelection();
+                            } else if (capa.style.display === "none" && selectedRowIndex === 0) {
+                                if (rows[rows.length - 1].querySelectorAll("td").length > selectedColumnIndex) {
+                                    selectedRowIndex = rows.length - 1;
+                                    updateSelection();
+                                } else {
+                                    selectedRowIndex = rows.length - 2;
+                                    updateSelection();
+                                }
+                            }
+                        }
+                    }
+                }
+
+                lastMouseX = currentMouseX;
+                lastMouseY = currentMouseY;
+
+                setTimeout(function() {
+                    isMouseMoving = false;
+                }, delay);
+            }
+        }
+
+        document.addEventListener("mousemove", handleMouseMove);
+    </script>
 </body>
 </html>
